@@ -17,7 +17,5 @@ public interface UserService {
 
     boolean checkTheUser(String name);
 
-//    boolean findUserByName(String name);
-//
 //    UserEntity getUserByName(String name);
 }

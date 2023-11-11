@@ -25,6 +25,7 @@ public class ApiController {
         UserEntity userEntity = null;
         if(userService.checkTheUser(user.getName())){
             userEntity = userService.findUserByName(user.getName());
+            System.out.println("User was found. New user was not created");
         }
         else {
             userEntity = user;
@@ -33,22 +34,10 @@ public class ApiController {
         return ResponseEntity.ok(userEntity.getId());
     }
 
-    @GetMapping(value = "/users/{id}")
-    public ResponseEntity<UserEntity> getUser(@PathVariable Integer id) {
-        UserEntity user = userService.getUserByID(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @PostMapping(value = "/messages/")
     public ResponseEntity<Integer> addMessage(@RequestBody MessageRequest messageRequest) {
         String text = messageRequest.getText();
-        System.out.println("requested text: " + text);
         String user = messageRequest.getUser();
-        System.out.println("requested user: " + user);
 
         MessageEntity messageEntity = new MessageEntity();
         messageEntity.setText(text);
@@ -59,23 +48,26 @@ public class ApiController {
         return ResponseEntity.ok(messageEntity.getMessageID());
     }
 
-    @GetMapping(value = "/messages/{id}")
-    public ResponseEntity<MessageEntity> getMessage(@PathVariable Integer id) {
-        MessageEntity message = messageService.getMessageByID(id);
-        if (message != null) {
-            return ResponseEntity.ok(message);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    @PostMapping(value = "/list/")
+    public ResponseEntity<List<String>> getAllUserMessages(@RequestBody UserEntity user){
+        System.out.println("Server got the username: " + user.getName());
+        UserEntity userEntity = null;
 
-    @GetMapping(value = "/messages/{name}")
-    public ResponseEntity<List<MessageEntity>> getMessagesByUserName(@PathVariable String name) {
-        List<MessageEntity> messages = messageService.findMessagesByUserName(name);
-        if (!messages.isEmpty()) {
-            return ResponseEntity.ok(messages);
-        } else {
-            return ResponseEntity.notFound().build();
+        if(userService.checkTheUser(user.getName())){
+            System.out.println("User checked and found");
+            userEntity = userService.findUserByName(user.getName());
+            System.out.println("Found user: " + userEntity.getName());
         }
+        else {
+            System.out.println("User was not found in repository");
+        }
+
+        assert userEntity != null;
+        List<String> messages = messageService.findMessagesByUser(userEntity.getName());
+
+        System.out.println("Sending the list: ");
+        messages.forEach(System.out::println);
+
+        return ResponseEntity.ok(messages);
     }
 }

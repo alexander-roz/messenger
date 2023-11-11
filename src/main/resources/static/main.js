@@ -7,6 +7,7 @@ const chat_messages = document.getElementById('chat_messages');
 
 //Соединение:
 let websocket;
+let activeUser;
 
 websocket = new WebSocket(url);
 websocket.onopen = function (evt) {
@@ -42,13 +43,16 @@ function submit() {
   let userName = document.getElementById("name").value;
   sessionStorage.setItem("userName", userName);
   console.log(userName);
+  activeUser = userName;
   addUser();
   window.open("/index");
 }
 
 function onPageLoad() {
-  document.getElementById("userName").innerHTML = "User: " + sessionStorage.getItem("userName");
-  console.log(sessionStorage.getItem("userName"));
+  let userName = sessionStorage.getItem("userName");
+  document.getElementById("userName").innerHTML = "User: " + userName;
+  console.log(userName);
+  getList(userName);
 }
 
 function addUser() {
@@ -83,4 +87,27 @@ function addMessage(text){
   })
       .then(response => response.json())
       .catch(error => console.error(error));
+}
+
+function getList(userName){
+console.log("sending to server user: " + userName);
+
+  fetch("/list/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      name: userName
+    })
+  })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log("js got the list: " + response)
+        response.forEach((message) => {
+          writeToScreen(message);
+        });
+      })
+      .catch((error) => console.error(error));
 }

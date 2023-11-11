@@ -2,10 +2,12 @@ package com.intellekta.message.services.impl;
 
 import com.intellekta.message.dto.Request;
 import com.intellekta.message.model.entities.MessageEntity;
+import com.intellekta.message.model.entities.UserEntity;
 import com.intellekta.message.model.repositories.MessageEntityRepository;
 import com.intellekta.message.services.MessageService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,7 +56,15 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageEntity> findMessagesByUserName(String name) {
-        return messageEntityRepository.findMessageEntitiesByUser_Name(name);
+    public List<String> findMessagesByUser(String user) {
+        List<String> messages = new ArrayList<>();
+
+        for(MessageEntity message:messageEntityRepository.findAll()){
+            if(message.getUser().getName().equalsIgnoreCase(user)){
+                messages.add(message.getText());
+                System.out.println("In method findMessagesByUser added: " + message.getText());
+            }
+        }
+        return messages;
     }
 }
