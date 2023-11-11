@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class MessageServiceImpl implements MessageService {
 
-    MessageEntityRepository messageEntityRepository;
+    private final MessageEntityRepository messageEntityRepository;
 
     public MessageServiceImpl(MessageEntityRepository messageEntityRepository) {
         this.messageEntityRepository = messageEntityRepository;
@@ -37,7 +37,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Request deleteAllMessages() {
         messageEntityRepository.deleteAll();
-        if(messageEntityRepository.findAll().size() == 0){
+        if(messageEntityRepository.count() == 0){
             return new Request(true);
         }
         else return new Request(false, "messages were not deleted");
@@ -50,12 +50,11 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageEntity getMessageByID(int id) {
-        return messageEntityRepository.findMessageEntitiesByMessageID(id);
+        return messageEntityRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<MessageEntity> findMessagesByUserName (String name){
-      return messageEntityRepository.findMessageEntitiesByUser_Name(name);
+    public List<MessageEntity> findMessagesByUserName(String name) {
+        return messageEntityRepository.findMessageEntitiesByUser_Name(name);
     }
-
 }

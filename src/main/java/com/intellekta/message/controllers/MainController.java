@@ -5,11 +5,12 @@ import com.intellekta.message.model.entities.MessageEntity;
 import com.intellekta.message.model.repositories.MessageEntityRepository;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-
+@Controller
 public class MainController extends SpringBootServletInitializer {
 
     MessageEntityRepository messageEntityRepository;
@@ -28,9 +29,11 @@ public class MainController extends SpringBootServletInitializer {
 
     @RequestMapping(value = "/index")
     public String index(Model model){
-        ArrayList <MessageEntity> messages = new ArrayList<>(messageEntityRepository.findAll());
-        model.addAttribute("messages", messages);
-        model.addAttribute("messagesCount", messages.size());
+//        if(messageEntityRepository.findAll().size() > 0){
+//            ArrayList <MessageEntity> messages = new ArrayList<>(messageEntityRepository.findAll());
+//            model.addAttribute("messages", messages);
+//            model.addAttribute("messagesCount", messages.size());
+//        }
         return "index";
     }
 }

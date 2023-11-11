@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    UserEntityRepository userEntityRepository;
+    private final UserEntityRepository userEntityRepository;
 
     public UserServiceImpl(UserEntityRepository userEntityRepository) {
         this.userEntityRepository = userEntityRepository;
@@ -25,11 +25,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Request deleteUser(UserEntity user) {
-        if(userEntityRepository.existsById(user.getId())){
+        if (userEntityRepository.existsById(user.getId())) {
             userEntityRepository.delete(user);
             return new Request(true);
-        }
-        else {
+        } else {
             return new Request(false, "User was not found");
         }
     }
@@ -37,11 +36,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Request deleteAllUsers() {
         userEntityRepository.deleteAll();
-        if(userEntityRepository.findAll().size() == 0){
+        if (userEntityRepository.findAll().isEmpty()) {
             return new Request(true);
-        }
-        else{
-            return new Request(false, "users were not deleted");
+        } else {
+            return new Request(false, "Users were not deleted");
         }
     }
 
@@ -54,4 +52,27 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserByID(int id) {
         return userEntityRepository.findUserEntityById(id);
     }
+
+    @Override
+    public UserEntity findUserByName(String name){
+        UserEntity userEntity = null;
+        for(UserEntity user:userEntityRepository.findAll()){
+            if(user.getName().equalsIgnoreCase(name)){
+                userEntity = user;
+            }
+        }
+        return userEntity;
+    }
+
+    @Override
+    public boolean checkTheUser(String name){
+        boolean found = false;
+        for (UserEntity user:userEntityRepository.findAll()){
+            if (user.getName().equalsIgnoreCase(name)){
+                found = true;
+            }
+        }
+        return found;
+    }
+
 }

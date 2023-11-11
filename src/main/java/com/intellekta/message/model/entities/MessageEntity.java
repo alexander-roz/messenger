@@ -18,9 +18,8 @@ public class MessageEntity {
     @Column(name = "message_text")
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "user_id", name = "user_id", nullable = false)
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name = "user_name")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 }

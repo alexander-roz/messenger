@@ -2,22 +2,20 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <link href="/static/css/styles.css" rel="stylesheet" type="text/css">
-  <title>MessageApplication</title>
+    <meta charset="UTF-8">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <title>MessageApplication</title>
 </head>
 
-<body>
-  <div class="container">
-    <input type="text" id="text_message" placeholder="Здесь вводится текст сообщения">
-    <button class="button" id="send_btn">Отправить</button>
-    <button class="button" id="geo_loc">Гео-локация</button>
+<body onload="onPageLoad()">
+<div class="subtitle, user-name" id="userName"></div>
+<div class="container">
+    <input type="text" id="text_message" placeholder="type the message">
+    <button class="button" id="send_btn">send</button>
     <div id="chat_window">
-      <div id="chat_messages"></div>
+        <div id="chat_messages" class="subtitle"></div>
     </div>
-  </div>
-
-  <script src="/static/js/main.js"></script>
+</div>
+<script src="/main.js"></script>
 </body>
-
 </html>

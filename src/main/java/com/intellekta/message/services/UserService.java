@@ -12,4 +12,12 @@ public interface UserService {
     Request deleteAllUsers();
     List<UserEntity> findAllUsers();
     UserEntity getUserByID(int id);
+
+    UserEntity findUserByName(String name);
+
+    boolean checkTheUser(String name);
+
+//    boolean findUserByName(String name);
+//
+//    UserEntity getUserByName(String name);
 }
